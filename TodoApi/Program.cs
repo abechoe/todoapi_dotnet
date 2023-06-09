@@ -11,6 +11,14 @@ builder.Services.AddDbContext<TodoContext>(opt => opt.UseNpgsql(builder.Configur
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "allowSpecificOrigins", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173");
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -21,6 +29,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("allowSpecificOrigins");
 
 app.UseAuthorization();
 
